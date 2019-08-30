@@ -1,25 +1,35 @@
-# DirectX Wrappers
+### Hacks for "The Legend of Heroes: Trails of Cold Steel" game
 
 ### Introduction
 
-Wraps the main DirectX and Direct3D DLLs.  It allows you to intercept calls to DirectX and Direct3D interface functions so that you can log API calls or you can add your own code into the game, such as enabling Anti-Aliasing or creating overlays in the game. Once you have compiled this you can simply copy the DLL into the same folder as the game's executable and it should load it as if it were the real DLL file. It still forwards all calls to the real one in System32, it just allows stuff to happen in between. 
+A very long story short: while it's the common practice for games to use the button (X) for the
+action and (O) for the cancel, TLoH's English game version forces to use a different setup
+(O - action, X - cancel).
 
-Wraps the following versions of DirectX:
-- DirectX 1-7, DirectDraw and Direct3D (ddraw.dll)
-- DirectX 8, Direct3D (d3d8.dll)
-- DirectX 9, Direct3D (d3d9.dll)
-- DirectSound and DirectSound8 (dsound.dll)
-- DirectInput (dinput.dll)
-- DirectInput8 (dinput8.dll)
+(Read more here: https://steamcommunity.com/app/538680/discussions/0/1471967615842855904/, http://www.xseedgames.com/forum/index.php?threads/trails-of-cold-steel-coming-to-pc-this-summer.29219/page-20)
 
-I plan to add these DLLs later:
-- d2d1.dll
-- d3d10.dll
-- d3d10core.dll
-- d3d11.dll
-- d3d12.dll
+This repository is introducing a hack allowing to swap these buttons.
 
-Note: It currently only works with 32bit games, but I might add 64bit support at some point.
+### Downloads
+
+Downloads here: https://github.com/ChronoMonochrome/DirectX_Hacks_for_TLoH/releases
+
+### How to:
+
+Download dinput8.zip and unpack to the game folder.
+Now "X" and "O" buttons will be swapped in the game.
+
+### Known issues:
+
+A hardcoded joystick GUID is used.
+```
+DEFINE_GUID(GUID_Joystick2, 0xD8C36BF0, 0x6A94, 0x11E8, 0x80, 0x02, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00);
+```
+
+This repository is not tested on a different joysticks than this GUID.
+
+### Credits
+Bases on (DirectX-Wrappers)[https://github.com/elishacloud/DirectX-Wrappers] repository:
 
 ### License
 
