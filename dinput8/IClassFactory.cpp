@@ -31,6 +31,7 @@ HRESULT m_IClassFactory::QueryInterface(REFIID riid, LPVOID FAR * ppvObj)
 		return S_OK;
 	}
 
+	Log() << "m_IClassFactory::QueryInterface";
 	HRESULT hr = ProxyInterface->QueryInterface(riid, ppvObj);
 
 	if (SUCCEEDED(hr))

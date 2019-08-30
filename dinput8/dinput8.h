@@ -32,3 +32,5 @@ extern AddressLookupTable<void> ProxyAddressLookupTable;
 #include "IDirectInputEnumDevice.h"
 #include "IDirectInputEnumEffect.h"
 #include "IClassFactory.h"
+
+DEFINE_GUID(GUID_Joystick2, 0xD8C36BF0, 0x6A94, 0x11E8, 0x80, 0x02, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00);

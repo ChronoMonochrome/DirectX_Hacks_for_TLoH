@@ -27,6 +27,8 @@ HRESULT m_IDirectInputEffect::QueryInterface(REFIID riid, LPVOID * ppvObj)
 		return S_OK;
 	}
 
+	Log() << "m_IDirectInputEffect::QueryInterface";
+
 	HRESULT hr = ProxyInterface->QueryInterface(riid, ppvObj);
 
 	if (SUCCEEDED(hr))

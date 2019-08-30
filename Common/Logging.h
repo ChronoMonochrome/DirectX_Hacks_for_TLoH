@@ -56,3 +56,5 @@ static void logf(wchar_t * fmt, ...)
 	Log() << output.c_str();
 	va_end(ap);
 }
+
+std::string GetNameOfRefIID(REFIID riid);

@@ -15,6 +15,69 @@
 */
 
 #include "dinput8.h"
+#include <Windows.h>
+
+std::string format(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	std::vector<char> v(1024);
+	while (true)
+	{
+		va_list args2;
+		va_copy(args2, args);
+		int res = vsnprintf(v.data(), v.size(), fmt, args2);
+		if ((res >= 0) && (res < static_cast<int>(v.size())))
+		{
+			va_end(args);
+			va_end(args2);
+			return std::string(v.data());
+		}
+		size_t size;
+		if (res < 0)
+			size = v.size() * 2;
+		else
+			size = static_cast<size_t>(res) + 1;
+		v.clear();
+		v.resize(size);
+		va_end(args2);
+	}
+}
+
+// https://stackoverflow.com/questions/1631375/is-there-an-os-function-to-translate-a-refiid-to-a-helpful-name
+std::string ToString(const GUID & guid)
+{
+    // could use StringFromIID() - but that requires managing an OLE string
+	std::string str;
+    str = format("%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
+        guid.Data1,
+        guid.Data2,
+        guid.Data3,
+        guid.Data4[0],
+        guid.Data4[1],
+        guid.Data4[2],
+        guid.Data4[3],
+        guid.Data4[4],
+        guid.Data4[5],
+        guid.Data4[6],
+        guid.Data4[7]);
+    return str;
+}
+
+std::string GetNameOfRefIID(REFIID riid)
+{
+	std::string name(ToString(riid));
+    /*try
+    {
+        // attempt to lookup the interface name from the registry
+        RegistryKey::OpenKey(HKEY_CLASSES_ROOT, "Interface", KEY_READ).OpenSubKey("{"+name+"}", KEY_READ).GetDefaultValue(name);
+    }
+    catch (...)
+    {
+        // use simple string representation if no registry entry found
+    }*/
+    return name;
+}
 
 std::ofstream Log::LOG("dinput8.log");
 AddressLookupTable<void> ProxyAddressLookupTable = AddressLookupTable<void>();
