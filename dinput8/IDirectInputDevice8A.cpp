@@ -120,8 +120,26 @@ HRESULT m_IDirectInputDevice8A::Unacquire()
 
 HRESULT m_IDirectInputDevice8A::GetDeviceState(DWORD cbData, LPVOID lpvData)
 {
+	char *buf = reinterpret_cast<char*>(lpvData);
+
+	//buf = (char*)malloc(cbData);
+	//memcpy(buf, lpvData, cbData);
+
+
 	Log() << __func__ << ": received " << cbData << " bytes";
-	return ProxyInterface->GetDeviceState(cbData, lpvData);
+
+	/*for (char c: buf) {
+		Log() << format("%02x", c);
+	}*/
+
+	//return S_OK;
+	HRESULT res = ProxyInterface->GetDeviceState(cbData, lpvData);
+
+	/*for (int i = 0; i < cbData; i++) {
+		Log() << i << ": " << int(buf[i]);
+	}*/
+
+	return res;
 }
 
 HRESULT m_IDirectInputDevice8A::GetDeviceData(DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags)
