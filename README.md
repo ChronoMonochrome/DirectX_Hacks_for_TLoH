@@ -29,7 +29,7 @@ DEFINE_GUID(GUID_Joystick2, 0xD8C36BF0, 0x6A94, 0x11E8, 0x80, 0x02, 0x44, 0x45, 
 This repository is not tested on a different joysticks than this GUID.
 
 ### Credits
-Bases on (DirectX-Wrappers)[https://github.com/elishacloud/DirectX-Wrappers] repository:
+Bases on [DirectX-Wrappers](https://github.com/elishacloud/DirectX-Wrappers) repository:
 
 ### License
 
