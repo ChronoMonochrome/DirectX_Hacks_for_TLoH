@@ -6,7 +6,8 @@ private:
 	IDirectInputDevice8W *ProxyInterface;
 
 public:
-	m_IDirectInputDevice8W(IDirectInputDevice8W *aOriginal) : ProxyInterface(aOriginal)
+	REFIID iid;
+	m_IDirectInputDevice8W(IDirectInputDevice8W *aOriginal) : ProxyInterface(aOriginal), iid(IID_IDirectInputDevice8W)
 	{
 		ProxyAddressLookupTable.SaveAddress(this, ProxyInterface);
 	}

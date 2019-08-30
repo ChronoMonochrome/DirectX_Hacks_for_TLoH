@@ -58,3 +58,4 @@ static void logf(wchar_t * fmt, ...)
 }
 
 std::string GetNameOfRefIID(REFIID riid);
+std::string format(const char* fmt, ...);

@@ -15,6 +15,11 @@
 */
 
 #include "dinput8.h"
+#include <Windows.h>
+#include <winnt.h>
+#include <NTSecAPI.h>
+#include <string>
+
 
 HRESULT m_IDirectInputDevice8A::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
@@ -71,16 +76,34 @@ HRESULT m_IDirectInputDevice8A::EnumObjects(LPDIENUMDEVICEOBJECTSCALLBACKA lpCal
 	return ProxyInterface->EnumObjects(lpCallback, pvRef, dwFlags);
 }
 
+int count = 0;
+
+std::string ToString1(const GUID& guid)
+{
+	// could use StringFromIID() - but that requires managing an OLE string
+	std::string str;
+	str = format("%08X",
+		guid.Data1);
+}
+
 HRESULT m_IDirectInputDevice8A::GetProperty(REFGUID rguidProp, LPDIPROPHEADER pdiph)
 {
-	Log() << __func__ << ": rguidProp = ";
+	Log() << __func__;
 	return ProxyInterface->GetProperty(rguidProp, pdiph);
 }
+//Log() << GetNameOfRefIID(## x);
+#define LOG_REFGUID(rguid, x) \
+		if (rguid == ## x) { \
+			Log() << "bump"; \
+		}
 
 HRESULT m_IDirectInputDevice8A::SetProperty(REFGUID rguidProp, LPCDIPROPHEADER pdiph)
 {
-	Log() << __func__ << ": rguidProp = ";
-	return ProxyInterface->SetProperty(rguidProp, pdiph);
+	Log() << __func__;
+
+	HRESULT res = ProxyInterface->SetProperty(rguidProp, pdiph);
+
+	return res;
 }
 
 HRESULT m_IDirectInputDevice8A::Acquire()
@@ -97,7 +120,7 @@ HRESULT m_IDirectInputDevice8A::Unacquire()
 
 HRESULT m_IDirectInputDevice8A::GetDeviceState(DWORD cbData, LPVOID lpvData)
 {
-	Log() << __func__;
+	Log() << __func__ << ": received " << cbData << " bytes";
 	return ProxyInterface->GetDeviceState(cbData, lpvData);
 }
 
@@ -107,9 +130,33 @@ HRESULT m_IDirectInputDevice8A::GetDeviceData(DWORD cbObjectData, LPDIDEVICEOBJE
 	return ProxyInterface->GetDeviceData(cbObjectData, rgdod, pdwInOut, dwFlags);
 }
 
+std::string getDataFormat(LPCDIDATAFORMAT lpdf) {
+	LPCDIDATAFORMAT kbd = &c_dfDIKeyboard,
+		mouse = &c_dfDIMouse,
+		mouse2 = &c_dfDIMouse2,
+		joy1 = &c_dfDIJoystick,
+		joy2 = &c_dfDIJoystick2;
+
+	if (lpdf == kbd)
+		return std::string("c_dfDIKeyboard");
+	else if (lpdf == mouse)
+		return std::string("c_dfDIMouse");
+	else if (lpdf == mouse2)
+		return std::string("c_dfDIMouse2");
+    else if (lpdf == GetdfDIJoystick())
+		return std::string("c_dfDIJoystick");
+	else if (lpdf == joy2)
+		return std::string("c_dfDIJoystick2");
+
+	return std::string("custom format");
+}
+
 HRESULT m_IDirectInputDevice8A::SetDataFormat(LPCDIDATAFORMAT lpdf)
 {
-	Log() << __func__;
+	std::string fmt = getDataFormat(lpdf);
+
+	Log() << __func__ << ": format = " << fmt;
+
 	return ProxyInterface->SetDataFormat(lpdf);
 }
 

@@ -16,6 +16,7 @@
 
 #include "dinput8.h"
 
+
 HRESULT m_IDirectInput8A::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
 	//Log() << "m_IDirectInput8A::QueryInterface, riid passed = " << GetNameOfRefIID(riid);
@@ -59,12 +60,16 @@ ULONG m_IDirectInput8A::Release()
 
 HRESULT m_IDirectInput8A::CreateDevice(REFGUID rguid, LPDIRECTINPUTDEVICE8A *lplpDirectInputDevice, LPUNKNOWN pUnkOuter)
 {
-	Log() << __func__;
+	this->iid = GetNameOfRefIID(rguid);
+	Log() << __func__ << " rguid=" << this->iid;
+	
 	HRESULT hr = ProxyInterface->CreateDevice(rguid, lplpDirectInputDevice, pUnkOuter);
 
-	if (SUCCEEDED(hr) && lplpDirectInputDevice)
-	{
-		*lplpDirectInputDevice = ProxyAddressLookupTable.FindAddress<m_IDirectInputDevice8A>(*lplpDirectInputDevice);
+	if (rguid == GUID_Joystick2) {
+		if (SUCCEEDED(hr) && lplpDirectInputDevice)
+		{
+			*lplpDirectInputDevice = ProxyAddressLookupTable.FindAddress<m_IDirectInputDevice8A>(*lplpDirectInputDevice);
+		}
 	}
 
 	return hr;
@@ -78,7 +83,7 @@ HRESULT m_IDirectInput8A::EnumDevices(DWORD dwDevType, LPDIENUMDEVICESCALLBACKA 
 
 HRESULT m_IDirectInput8A::GetDeviceStatus(REFGUID rguidInstance)
 {
-	Log() << __func__;
+	Log() << __func__ << " rguidInstance = " << GetNameOfRefIID(rguidInstance);
 	return ProxyInterface->GetDeviceStatus(rguidInstance);
 }
 

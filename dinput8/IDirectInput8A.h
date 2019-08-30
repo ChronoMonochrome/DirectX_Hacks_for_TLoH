@@ -6,7 +6,8 @@ private:
 	IDirectInput8A *ProxyInterface;
 
 public:
-	m_IDirectInput8A(IDirectInput8A *aOriginal) : ProxyInterface(aOriginal)
+	std::string iid;
+	m_IDirectInput8A(IDirectInput8A *aOriginal) : ProxyInterface(aOriginal), iid("")
 	{
 		ProxyAddressLookupTable.SaveAddress(this, ProxyInterface);
 	}
