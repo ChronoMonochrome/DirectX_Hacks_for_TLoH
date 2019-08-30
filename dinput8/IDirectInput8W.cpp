@@ -27,7 +27,9 @@ HRESULT m_IDirectInput8W::QueryInterface(REFIID riid, LPVOID * ppvObj)
 		return S_OK;
 	}
 
+#ifdef DEBUG
 	Log() << "m_IDirectInput8W::QueryInterface";
+#endif
 
 	HRESULT hr = ProxyInterface->QueryInterface(riid, ppvObj);
 

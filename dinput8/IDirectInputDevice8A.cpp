@@ -23,7 +23,9 @@
 
 HRESULT m_IDirectInputDevice8A::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
+#ifdef DEBUG
 	Log() << __func__ << ": riid=";
+#endif
 	if ((riid == IID_IDirectInputDevice8A || riid == IID_IUnknown) && ppvObj)
 	{
 		AddRef();
@@ -47,13 +49,17 @@ HRESULT m_IDirectInputDevice8A::QueryInterface(REFIID riid, LPVOID * ppvObj)
 
 ULONG m_IDirectInputDevice8A::AddRef()
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->AddRef();
 }
 
 ULONG m_IDirectInputDevice8A::Release()
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	ULONG ref = ProxyInterface->Release();
 
 	if (ref == 0)
@@ -66,40 +72,33 @@ ULONG m_IDirectInputDevice8A::Release()
 
 HRESULT m_IDirectInputDevice8A::GetCapabilities(LPDIDEVCAPS lpDIDevCaps)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->GetCapabilities(lpDIDevCaps);
 }
 
 HRESULT m_IDirectInputDevice8A::EnumObjects(LPDIENUMDEVICEOBJECTSCALLBACKA lpCallback, LPVOID pvRef, DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->EnumObjects(lpCallback, pvRef, dwFlags);
-}
-
-int count = 0;
-
-std::string ToString1(const GUID& guid)
-{
-	// could use StringFromIID() - but that requires managing an OLE string
-	std::string str;
-	str = format("%08X",
-		guid.Data1);
 }
 
 HRESULT m_IDirectInputDevice8A::GetProperty(REFGUID rguidProp, LPDIPROPHEADER pdiph)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->GetProperty(rguidProp, pdiph);
 }
-//Log() << GetNameOfRefIID(## x);
-#define LOG_REFGUID(rguid, x) \
-		if (rguid == ## x) { \
-			Log() << "bump"; \
-		}
 
 HRESULT m_IDirectInputDevice8A::SetProperty(REFGUID rguidProp, LPCDIPROPHEADER pdiph)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 
 	HRESULT res = ProxyInterface->SetProperty(rguidProp, pdiph);
 
@@ -108,13 +107,17 @@ HRESULT m_IDirectInputDevice8A::SetProperty(REFGUID rguidProp, LPCDIPROPHEADER p
 
 HRESULT m_IDirectInputDevice8A::Acquire()
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->Acquire();
 }
 
 HRESULT m_IDirectInputDevice8A::Unacquire()
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->Unacquire();
 }
 
@@ -126,7 +129,7 @@ HRESULT m_IDirectInputDevice8A::Unacquire()
  *  Uncomment for debugging.
  */
 
-#if 0
+#ifdef VERBOSE_DEBUG
 #define UNKNOWN_SEQ -9999
 
 int my_buf[] = {
@@ -409,7 +412,9 @@ HRESULT m_IDirectInputDevice8A::GetDeviceState(DWORD cbData, LPVOID lpvData)
 {
 	char *buf = reinterpret_cast<char*>(lpvData);
 
+#ifdef DEBUG
 	Log() << __func__ << ": received " << cbData << " bytes";
+#endif
 
 	/*for (char c: buf) {
 		Log() << format("%02x", c);
@@ -423,19 +428,22 @@ HRESULT m_IDirectInputDevice8A::GetDeviceState(DWORD cbData, LPVOID lpvData)
 	buf[50] = tmp;
 
 	// uncomment to debug data received from joystick
-	/*
+#ifdef VERBOSE_DEBUG
 	for (int i = 0; i < cbData; i++) {
 		if (my_buf[i] != UNKNOWN_SEQ) {
 			buf[i] = my_buf[i];
 		}
-	}*/
+	}
+#endif
 
 	return res;
 }
 
 HRESULT m_IDirectInputDevice8A::GetDeviceData(DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->GetDeviceData(cbObjectData, rgdod, pdwInOut, dwFlags);
 }
 
@@ -462,52 +470,68 @@ std::string getDataFormat(LPCDIDATAFORMAT lpdf) {
 
 HRESULT m_IDirectInputDevice8A::SetDataFormat(LPCDIDATAFORMAT lpdf)
 {
+#ifdef DEBUG
 	std::string fmt = getDataFormat(lpdf);
 
 	Log() << __func__ << ": format = " << fmt;
+#endif
 
 	return ProxyInterface->SetDataFormat(lpdf);
 }
 
 HRESULT m_IDirectInputDevice8A::SetEventNotification(HANDLE hEvent)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->SetEventNotification(hEvent);
 }
 
 HRESULT m_IDirectInputDevice8A::SetCooperativeLevel(HWND hwnd, DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->SetCooperativeLevel(hwnd, dwFlags);
 }
 
 HRESULT m_IDirectInputDevice8A::GetObjectInfo(LPDIDEVICEOBJECTINSTANCEA pdidoi, DWORD dwObj, DWORD dwHow)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->GetObjectInfo(pdidoi, dwObj, dwHow);
 }
 
 HRESULT m_IDirectInputDevice8A::GetDeviceInfo(LPDIDEVICEINSTANCEA pdidi)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->GetDeviceInfo(pdidi);
 }
 
 HRESULT m_IDirectInputDevice8A::RunControlPanel(HWND hwndOwner, DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->RunControlPanel(hwndOwner, dwFlags);
 }
 
 HRESULT m_IDirectInputDevice8A::Initialize(HINSTANCE hinst, DWORD dwVersion, REFGUID rguid)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->Initialize(hinst, dwVersion, rguid);
 }
 
 HRESULT m_IDirectInputDevice8A::CreateEffect(REFGUID rguid, LPCDIEFFECT lpeff, LPDIRECTINPUTEFFECT * ppdeff, LPUNKNOWN punkOuter)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	HRESULT hr = ProxyInterface->CreateEffect(rguid, lpeff, ppdeff, punkOuter);
 
 	if (SUCCEEDED(hr) && ppdeff)
@@ -520,31 +544,41 @@ HRESULT m_IDirectInputDevice8A::CreateEffect(REFGUID rguid, LPCDIEFFECT lpeff, L
 
 HRESULT m_IDirectInputDevice8A::EnumEffects(LPDIENUMEFFECTSCALLBACKA lpCallback, LPVOID pvRef, DWORD dwEffType)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->EnumEffects(lpCallback, pvRef, dwEffType);
 }
 
 HRESULT m_IDirectInputDevice8A::GetEffectInfo(LPDIEFFECTINFOA pdei, REFGUID rguid)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->GetEffectInfo(pdei, rguid);
 }
 
 HRESULT m_IDirectInputDevice8A::GetForceFeedbackState(LPDWORD pdwOut)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->GetForceFeedbackState(pdwOut);
 }
 
 HRESULT m_IDirectInputDevice8A::SendForceFeedbackCommand(DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->SendForceFeedbackCommand(dwFlags);
 }
 
 HRESULT m_IDirectInputDevice8A::EnumCreatedEffectObjects(LPDIENUMCREATEDEFFECTOBJECTSCALLBACK lpCallback, LPVOID pvRef, DWORD fl)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	if (!lpCallback)
 	{
 		return E_INVALIDARG;
@@ -559,48 +593,64 @@ HRESULT m_IDirectInputDevice8A::EnumCreatedEffectObjects(LPDIENUMCREATEDEFFECTOB
 
 HRESULT m_IDirectInputDevice8A::Escape(LPDIEFFESCAPE pesc)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->Escape(pesc);
 }
 
 HRESULT m_IDirectInputDevice8A::Poll()
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->Poll();
 }
 
 HRESULT m_IDirectInputDevice8A::SendDeviceData(DWORD cbObjectData, LPCDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD fl)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->SendDeviceData(cbObjectData, rgdod, pdwInOut, fl);
 }
 
 HRESULT m_IDirectInputDevice8A::EnumEffectsInFile(LPCSTR lpszFileName, LPDIENUMEFFECTSINFILECALLBACK pec, LPVOID pvRef, DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->EnumEffectsInFile(lpszFileName, pec, pvRef, dwFlags);
 }
 
 HRESULT m_IDirectInputDevice8A::WriteEffectToFile(LPCSTR lpszFileName, DWORD dwEntries, LPDIFILEEFFECT rgDiFileEft, DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->WriteEffectToFile(lpszFileName, dwEntries, rgDiFileEft, dwFlags);
 }
 
 HRESULT m_IDirectInputDevice8A::BuildActionMap(LPDIACTIONFORMATA lpdiaf, LPCSTR lpszUserName, DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->BuildActionMap(lpdiaf, lpszUserName, dwFlags);
 }
 
 HRESULT m_IDirectInputDevice8A::SetActionMap(LPDIACTIONFORMATA lpdiActionFormat, LPCSTR lptszUserName, DWORD dwFlags)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->SetActionMap(lpdiActionFormat, lptszUserName, dwFlags);
 }
 
 HRESULT m_IDirectInputDevice8A::GetImageInfo(LPDIDEVICEIMAGEINFOHEADERA lpdiDevImageInfoHeader)
 {
+#ifdef DEBUG
 	Log() << __func__;
+#endif
 	return ProxyInterface->GetImageInfo(lpdiDevImageInfoHeader);
 }
