@@ -64,10 +64,8 @@ ULONG m_IDirectInput8A::Release()
 
 HRESULT m_IDirectInput8A::CreateDevice(REFGUID rguid, LPDIRECTINPUTDEVICE8A *lplpDirectInputDevice, LPUNKNOWN pUnkOuter)
 {
-#ifdef DEBUG
 	this->iid = GetNameOfRefIID(rguid);
 	Log() << __func__ << " rguid=" << this->iid;
-#endif
 
 	HRESULT hr = ProxyInterface->CreateDevice(rguid, lplpDirectInputDevice, pUnkOuter);
 

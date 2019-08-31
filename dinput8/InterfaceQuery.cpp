@@ -23,15 +23,11 @@ void genericQueryInterface(REFIID riid, LPVOID * ppvObj)
 		return;
 	}
 
-	Log() << "genericQueryInterface, riid = " << GetNameOfRefIID(riid) <<
-		" IID_IDirectInput8A = " << GetNameOfRefIID(IID_IDirectInput8A);
-
 #define QUERYINTERFACE(x) \
 	if (riid == IID_ ## x) \
 		{ \
 			*ppvObj = ProxyAddressLookupTable.FindAddress<m_ ## x>(*ppvObj); \
-			Log() << "riid matched " << GetNameOfRefIID(IID_## x); \
-		} else { Log() << "riid didn't match " << GetNameOfRefIID(IID_## x); }
+		}
 
 #define CREATEINTERFACE(x) \
 	if (riid == IID_ ## x) \
