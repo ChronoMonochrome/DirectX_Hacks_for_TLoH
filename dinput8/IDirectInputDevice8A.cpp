@@ -121,6 +121,11 @@ HRESULT m_IDirectInputDevice8A::Unacquire()
 	return ProxyInterface->Unacquire();
 }
 
+#define BUTTON_TRIANGLE	48
+#define BUTTON_CIRCLE	49
+#define BUTTON_CROSS	50
+#define BUTTON_SQUARE	51
+
 /*
  *  Below is the most common data received from the joystick.
  *  For debugging purposes, this sequence of bytes can be used
@@ -130,7 +135,7 @@ HRESULT m_IDirectInputDevice8A::Unacquire()
  */
 
 #ifdef VERBOSE_DEBUG
-#define UNKNOWN_SEQ -9999
+#define DONT_OVERRIDE -9999
 
 int my_buf[] = {
 	-2, // 0
@@ -181,16 +186,16 @@ int my_buf[] = {
 	-1, // 45
 	-1, // 46
 	-1, // 47
-	0, // 48
-	UNKNOWN_SEQ, // 49 - action (2) button
-	UNKNOWN_SEQ, // 50 - cancel (3) button
-	0, // 51
+	DONT_OVERRIDE, // 48 - triangle button
+	DONT_OVERRIDE, // 49 - action (2) button
+	DONT_OVERRIDE, // 50 - cancel (3) button
+	DONT_OVERRIDE, // 51 - square button
 	0, // 52
 	0, // 53
 	0, // 54
 	0, // 55
 	0, // 56
-	UNKNOWN_SEQ, // 57 - start button
+	DONT_OVERRIDE, // 57 - start button
 	0, // 58
 	0, // 59
 	0, // 60
@@ -422,15 +427,20 @@ HRESULT m_IDirectInputDevice8A::GetDeviceState(DWORD cbData, LPVOID lpvData)
 
 	HRESULT res = ProxyInterface->GetDeviceState(cbData, lpvData);
 
-	// switch action and cancel buttons
-	char tmp = buf[49];
-	buf[49] = buf[50];
-	buf[50] = tmp;
+	// swap action and cancel buttons
+	char tmp = buf[BUTTON_CIRCLE];
+	buf[BUTTON_CIRCLE] = buf[BUTTON_CROSS];
+	buf[BUTTON_CROSS] = tmp;
+
+	// swap mismatched triangle and square buttons
+	tmp = buf[BUTTON_TRIANGLE];
+	buf[BUTTON_TRIANGLE] = buf[BUTTON_SQUARE];
+	buf[BUTTON_SQUARE] = tmp;
 
 	// uncomment to debug data received from joystick
 #ifdef VERBOSE_DEBUG
 	for (int i = 0; i < cbData; i++) {
-		if (my_buf[i] != UNKNOWN_SEQ) {
+		if (my_buf[i] != DONT_OVERRIDE) {
 			buf[i] = my_buf[i];
 		}
 	}
