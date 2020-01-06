@@ -69,7 +69,8 @@ HRESULT m_IDirectInput8A::CreateDevice(REFGUID rguid, LPDIRECTINPUTDEVICE8A *lpl
 
 	HRESULT hr = ProxyInterface->CreateDevice(rguid, lplpDirectInputDevice, pUnkOuter);
 
-	if (rguid == GUID_Joystick2) {
+	if (rguid != GUID_SysMouse && rguid != GUID_SysKeyboard && rguid != GUID_SysMouseEm && rguid != GUID_SysMouseEm2 && rguid != GUID_SysKeyboardEm && rguid != GUID_SysKeyboardEm2) 
+{
 		if (SUCCEEDED(hr) && lplpDirectInputDevice)
 		{
 			*lplpDirectInputDevice = ProxyAddressLookupTable.FindAddress<m_IDirectInputDevice8A>(*lplpDirectInputDevice);
